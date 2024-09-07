@@ -6,16 +6,14 @@ import org.example.tacocloud.domain.Ingredient;
 import org.example.tacocloud.domain.Ingredient.Type;
 import org.example.tacocloud.domain.Taco;
 import org.example.tacocloud.domain.TacoOrder;
+import org.example.tacocloud.repository.IngredientRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,26 +23,47 @@ import java.util.stream.Collectors;
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
+    private final IngredientRepository ingredientRepository;
+
+    public DesignTacoController(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
-                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
-                new Ingredient("GRBF", "Ground beef", Type.PROTEIN),
-                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
-                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
-                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
-                new Ingredient("CHED", "Cheddar", Type.CHEESE),
-                new Ingredient("JACK", "Monterrey jack", Type.CHEESE),
-                new Ingredient("SLSA", "Salsa", Type.SAUCE)
-        );
-
-        Ingredient.Type[] types = Ingredient.Type.values();
-        for (Type type : types) {
+        Iterable<Ingredient> iterable = ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();
+        while (iterable.iterator().hasNext()) {
+            ingredients.add(iterable.iterator().next());
+        }
+        Type[] values = Type.values();
+        for (Type type : values) {
             model.addAttribute(type.toString().toLowerCase(),
-                    filterByType(ingredients, type));
+            filterByType(ingredients, type));
         }
     }
+
+
+//    @ModelAttribute
+//    public void addIngredientsToModel(Model model) {
+//        List<Ingredient> ingredients = Arrays.asList(
+//                new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
+//                new Ingredient("COTO", "Corn Tortilla", Type.WRAP),
+//                new Ingredient("GRBF", "Ground beef", Type.PROTEIN),
+//                new Ingredient("CARN", "Carnitas", Type.PROTEIN),
+//                new Ingredient("TMTO", "Diced Tomatoes", Type.VEGGIES),
+//                new Ingredient("LETC", "Lettuce", Type.VEGGIES),
+//                new Ingredient("CHED", "Cheddar", Type.CHEESE),
+//                new Ingredient("JACK", "Monterrey jack", Type.CHEESE),
+//                new Ingredient("SLSA", "Salsa", Type.SAUCE)
+//        );
+//
+//        Ingredient.Type[] types = Ingredient.Type.values();
+//        for (Type type : types) {
+//            model.addAttribute(type.toString().toLowerCase(),
+//                    filterByType(ingredients, type));
+//        }
+//    }
 
     @ModelAttribute(name = "tacoOrder")
     public TacoOrder order() {
@@ -64,7 +83,7 @@ public class DesignTacoController {
     @PostMapping
     public String processTaco(@Valid Taco taco, Errors errors,
                               @ModelAttribute TacoOrder tacoOrder) {
-        if(errors.hasErrors()) {
+        if (errors.hasErrors()) {
             return "design";
         }
 

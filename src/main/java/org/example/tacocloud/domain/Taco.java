@@ -4,10 +4,16 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Data
-public class Taco {
+public class Taco implements Serializable {
+
+    private Long id;
+
+    private Date createdAt;
 
     @NotNull
     @Size(min = 5, message = "Name must be at least 5characters long")
@@ -15,6 +21,6 @@ public class Taco {
 
     @NotNull
     @Size(min = 1, message = "You must choose at least 1 ingredient")
-    private List<Ingredient> ingredients;
+    private List<IngredientRef> ingredients;
 
 }

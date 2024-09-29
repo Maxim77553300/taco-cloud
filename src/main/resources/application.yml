@@ -4,3 +4,10 @@ spring:
   datasource:
     generate-unique-name: false
     name: tacocloud
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: local
+      password:
+      database: tacocloud

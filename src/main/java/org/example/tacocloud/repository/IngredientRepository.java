@@ -1,10 +1,11 @@
 package org.example.tacocloud.repository;
 
 import org.example.tacocloud.domain.Ingredient;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface IngredientRepository {
+public interface IngredientRepository extends CrudRepository<Ingredient, String> {
 
     Iterable<Ingredient> findAll();
 

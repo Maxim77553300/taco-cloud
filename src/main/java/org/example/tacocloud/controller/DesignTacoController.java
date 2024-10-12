@@ -31,15 +31,11 @@ public class DesignTacoController {
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        Iterable<Ingredient> iterable = ingredientRepository.findAll();
-        List<Ingredient> ingredients = new ArrayList<>();
-        while (iterable.iterator().hasNext()) {
-            ingredients.add(iterable.iterator().next());
-        }
+        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
         Type[] values = Type.values();
         for (Type type : values) {
             model.addAttribute(type.toString().toLowerCase(),
-            filterByType(ingredients, type));
+            filterByType((List<Ingredient>) ingredients, type));
         }
     }
 
@@ -83,9 +79,9 @@ public class DesignTacoController {
     @PostMapping
     public String processTaco(@Valid Taco taco, Errors errors,
                               @ModelAttribute TacoOrder tacoOrder) {
-        if (errors.hasErrors()) {
-            return "design";
-        }
+//        if (errors.hasErrors()) {
+//            return "design";
+//        }
 
         tacoOrder.addTaco(taco);
         log.info("Processing taco: {}", taco);

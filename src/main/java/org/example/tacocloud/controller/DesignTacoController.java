@@ -1,33 +1,29 @@
 package org.example.tacocloud.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.tacocloud.domain.Ingredient;
 import org.example.tacocloud.domain.Ingredient.Type;
 import org.example.tacocloud.domain.Taco;
 import org.example.tacocloud.domain.TacoOrder;
-import org.example.tacocloud.repository.IngredientRepository;
+import org.example.tacocloud.repository.IngredientRepositoryJpa;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@RequiredArgsConstructor
 @SessionAttributes("tacoOrder")
 public class DesignTacoController {
 
-    private final IngredientRepository ingredientRepository;
-
-    public DesignTacoController(IngredientRepository ingredientRepository) {
-        this.ingredientRepository = ingredientRepository;
-    }
+    private final IngredientRepositoryJpa ingredientRepository;
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {

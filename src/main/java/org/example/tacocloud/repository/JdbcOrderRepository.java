@@ -100,7 +100,7 @@ public class JdbcOrderRepository implements OrderRepository {
         long tacoId = keyHolder.getKey().longValue();
         taco.setId(tacoId);
 
-        saveIngredientsRefs(tacoId, taco.getIngredients());
+//        saveIngredientsRefs(tacoId, taco.getIngredients());
 
         return tacoId;
     }

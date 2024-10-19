@@ -1,24 +1,24 @@
 package org.example.tacocloud.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.*;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Getter
 @Setter
-@Table
-@RequiredArgsConstructor
-@EqualsAndHashCode
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 public class Ingredient {
 
     @Id
-    private final String id;
-    private final String name;
-    private final Type type;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
+    private String name;
+    private Type type;
 
     public enum Type {
         WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE

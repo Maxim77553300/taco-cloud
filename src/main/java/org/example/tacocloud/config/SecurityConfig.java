@@ -4,26 +4,23 @@ import org.example.tacocloud.domain.User;
 import org.example.tacocloud.repository.UserRepositoryJpa;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+//        return new BCryptPasswordEncoder();
+        return NoOpPasswordEncoder.getInstance();
     }
 
 //    @Bean
@@ -37,6 +34,19 @@ public class SecurityConfig {
 //                Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"))));
 //        return new InMemoryUserDetailsManager(users);
 //    }
+
+    @Bean
+    public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .authorizeRequests()
+                .requestMatchers("/design", "/orders").access("hasRole('USER')")
+                .requestMatchers("/", "/**").permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .and()
+                .build();
+    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

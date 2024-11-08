@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface OrderRepositoryJpa extends CrudRepository<TacoOrder, Long> {
+public interface OrderRepositoryJpa extends CrudRepository<TacoOrder, String> {
 
     List<TacoOrder> findByDeliveryZip(String deliveryZip);
 

@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@Repository
+//@Repository
 public class JdbcOrderRepository implements OrderRepository {
 
     private JdbcOperations jdbcOperations;

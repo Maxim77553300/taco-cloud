@@ -4,7 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.tacocloud.domain.TacoOrder;
+import org.example.tacocloud.domain.User;
 import org.example.tacocloud.repository.OrderRepositoryJpa;
+import org.example.tacocloud.repository.UserRepositoryJpa;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 @SessionAttributes("tacoOrder")
 public class OrderController {
 
-    private OrderRepositoryJpa orderRepository;
+    private final OrderRepositoryJpa orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {
@@ -29,14 +32,17 @@ public class OrderController {
 
     @PostMapping
     public String processOrder(@Valid TacoOrder tacoOrder, Errors errors,
-                               SessionStatus sessionStatus) {
-        if(errors.hasErrors()) {
+                               SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
+        if (errors.hasErrors()) {
             return "orderForm";
         }
+
+        tacoOrder.setUser(user);
+
         log.info("Order submitted: {}", tacoOrder);
         orderRepository.save(tacoOrder);
         sessionStatus.setComplete();
 
-        return "redirect:/";
+        return "finish";
     }
 }

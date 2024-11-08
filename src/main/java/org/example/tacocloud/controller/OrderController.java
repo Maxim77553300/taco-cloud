@@ -1,9 +1,10 @@
 package org.example.tacocloud.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.tacocloud.domain.TacoOrder;
-import org.example.tacocloud.repository.OrderRepository;
+import org.example.tacocloud.repository.OrderRepositoryJpa;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +15,12 @@ import org.springframework.web.bind.support.SessionStatus;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/orders")
 @SessionAttributes("tacoOrder")
 public class OrderController {
 
-    private OrderRepository orderRepository;
-
-    public OrderController(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    private OrderRepositoryJpa orderRepository;
 
     @GetMapping("/current")
     public String orderForm() {

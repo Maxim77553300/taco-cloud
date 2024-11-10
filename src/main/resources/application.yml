@@ -1,9 +1,29 @@
 spring:
   application:
     name: taco-cloud
+#  datasource:
+#    generate-unique-name: false
+#    name: tacocloud
   datasource:
-    generate-unique-name: false
-    name: tacocloud
+    url: jdbc:h2:mem:tacocloud
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+
+
+
 #    url: jdbc:postgresql://localhost:5432/tacocloud
 #    username: postgres
 #    password: 77553300

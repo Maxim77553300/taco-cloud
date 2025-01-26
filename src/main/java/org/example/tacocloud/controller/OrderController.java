@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.tacocloud.domain.TacoOrder;
 import org.example.tacocloud.domain.User;
+import org.example.tacocloud.property.TacoProperties;
 import org.example.tacocloud.repository.OrderRepositoryJpa;
-import org.example.tacocloud.repository.UserRepositoryJpa;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.support.SessionStatus;
 public class OrderController {
 
     private final OrderRepositoryJpa orderRepository;
+    private final TacoProperties tacoProperties;
 
     @GetMapping("/current")
     public String orderForm() {
@@ -44,5 +48,14 @@ public class OrderController {
         sessionStatus.setComplete();
 
         return "finish";
+    }
+
+    @GetMapping
+    public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
+
+        Pageable pageable = PageRequest.of(0, tacoProperties.getPageSize());
+        model.addAttribute("orders", orderRepository.findByUserOrderByPlacedAtDesc(user, pageable));
+
+        return "orders";
     }
 }

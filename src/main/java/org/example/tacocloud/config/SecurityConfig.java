@@ -1,9 +1,13 @@
 package org.example.tacocloud.config;
 
+import jakarta.annotation.Resource;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.example.tacocloud.domain.User;
 import org.example.tacocloud.repository.UserRepositoryJpa;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -14,12 +18,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+@Log4j2
 @Configuration
-@EnableGlobalMethodSecurity//for @PreAuthorize
+//@EnableGlobalMethodSecurity//for @PreAuthorize
 public class SecurityConfig {
+
+    @Resource
+    private Environment environment;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        log.info("Active profile : " + Arrays.stream(environment.getActiveProfiles()).collect(Collectors.joining()));// to show active profiles
 //        return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
     }

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface OrderRepositoryJpa extends CrudRepository<TacoOrder, String> {
+public interface OrderRepositoryJpa extends CrudRepository<TacoOrder, Long> {
 
     List<TacoOrder> findByDeliveryZip(String deliveryZip);
 

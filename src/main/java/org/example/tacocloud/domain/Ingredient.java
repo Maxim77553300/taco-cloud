@@ -21,7 +21,6 @@ import lombok.Setter;
 public class Ingredient {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private String name;
     @Enumerated(EnumType.STRING)

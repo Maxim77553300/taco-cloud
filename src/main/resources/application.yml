@@ -28,6 +28,9 @@ spring:
        hibernate:
          dialect: org.hibernate.dialect.PostgreSQLDialect
          format-sql: true
+  data:
+    rest:
+      base-path: /data-api
 
 
   security:
@@ -63,3 +66,22 @@ taco:
 #      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 #        format-sql: true
+
+management:
+  info:
+    env:
+      enabled: true
+  health:
+     env:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: info, health
+      base-path: /actuator
+
+info:
+  application:
+    name: '@project.name@'
+    description: '@project.description@'
+    version: '@project.version@'

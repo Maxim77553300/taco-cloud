@@ -8,6 +8,7 @@ import org.example.tacocloud.repository.UserRepositoryJpa;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -55,6 +56,7 @@ public class SecurityConfig {
                 .authorizeRequests()
 //                .requestMatchers("/design", "/orders").access("hasRole('USER')")
                 .requestMatchers("/design", "/orders").fullyAuthenticated()
+                .requestMatchers(HttpMethod.GET, "/public/**").permitAll()
                 .anyRequest().permitAll()
 //                .anyRequest().authenticated()
                 .and()
